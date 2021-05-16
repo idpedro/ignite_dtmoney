@@ -1,11 +1,12 @@
 import Modal from "react-modal";
-import { TransactionsContext } from "../../TransactionsContext";
-import { FormEvent, useContext, useState } from "react";
-import { Container, TransactionTypeConteiner, RadioBox } from "./styles";
+import { FormEvent, useState } from "react";
+import { useTransactions } from "../../hooks/useTransactions";
 
 import CloseImg from "../../assets/close.svg";
 import IncomeImg from "../../assets/income.svg";
 import OutcomeImg from "../../assets/outcome.svg";
+
+import { Container, TransactionTypeConteiner, RadioBox } from "./styles";
 
 interface NewTransacrionModalProps {
   isOpen: boolean;
@@ -16,7 +17,7 @@ export function NewTransacrionModal({
   isOpen,
   onRequestClose,
 }: NewTransacrionModalProps) {
-  const { createTransaction } = useContext(TransactionsContext);
+  const { createTransaction } = useTransactions();
 
   const [type, setType] = useState("deposit");
 

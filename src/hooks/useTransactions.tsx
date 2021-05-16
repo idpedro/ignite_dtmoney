@@ -1,5 +1,11 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
-import { Api } from "./services/api";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { Api } from "../services/api";
 
 interface Transaction {
   id: number;
@@ -54,4 +60,10 @@ export function TransactionProvider({ children }: TransactionProviderProps) {
       {children}
     </TransactionsContext.Provider>
   );
+}
+
+export function useTransactions() {
+  const context = useContext(TransactionsContext);
+
+  return context;
 }
