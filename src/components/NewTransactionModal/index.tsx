@@ -1,11 +1,11 @@
 import Modal from "react-modal";
-import { FormEvent, useState } from "react";
+import { TransactionsContext } from "../../TransactionsContext";
+import { FormEvent, useContext, useState } from "react";
 import { Container, TransactionTypeConteiner, RadioBox } from "./styles";
 
 import CloseImg from "../../assets/close.svg";
 import IncomeImg from "../../assets/income.svg";
 import OutcomeImg from "../../assets/outcome.svg";
-import { Api } from "../../services/api";
 
 interface NewTransacrionModalProps {
   isOpen: boolean;
@@ -16,21 +16,22 @@ export function NewTransacrionModal({
   isOpen,
   onRequestClose,
 }: NewTransacrionModalProps) {
+  const { createTransaction } = useContext(TransactionsContext);
+
   const [type, setType] = useState("deposit");
 
   const [title, setTitle] = useState("");
-  const [value, setValue] = useState(0);
+  const [amount, setAmount] = useState(0);
   const [category, setCategory] = useState("");
 
-  function handrerCreateNewTransaction(event: FormEvent) {
+  async function handrerCreateNewTransaction(event: FormEvent) {
     event.preventDefault();
-    const data = {
-      title,
-      value,
-      category,
-      type,
-    };
-    Api.post("/transactions", data);
+    await createTransaction({ title, amount, category, type });
+    onRequestClose();
+    setTitle("");
+    setAmount(0);
+    setCategory("");
+    setType("deposit");
   }
 
   return (
@@ -52,9 +53,9 @@ export function NewTransacrionModal({
         <input
           type="number"
           placeholder="Valor"
-          value={value}
+          value={amount}
           onChange={(event) => {
-            setValue(Number(event.target.value));
+            setAmount(Number(event.target.value));
           }}
         />
         <TransactionTypeConteiner>
